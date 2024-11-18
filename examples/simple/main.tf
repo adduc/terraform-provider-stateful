@@ -1,3 +1,5 @@
+## Required Providers
+
 terraform {
   required_providers {
     stateful = {
@@ -7,6 +9,8 @@ terraform {
   }
 }
 
+## Provider Configuration
+
 provider "stateful" {
   state = {
     key1 = "value1"
@@ -14,16 +18,12 @@ provider "stateful" {
   }
 }
 
+## Data Sources
+
 data "stateful_state" "state" {}
 
-module "state" {
-  source = "./module"
-}
+## Outputs
 
 output "state" {
   value = data.stateful_state.state
-}
-
-output "module_state" {
-  value = module.state.state
 }
