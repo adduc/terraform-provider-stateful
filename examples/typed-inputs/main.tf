@@ -1,9 +1,9 @@
 ##
-# Exercise: Single Module Example
+# Exercise: Types Inputs Example
 #
-# This exercise demonstrates how the `stateful` provider can be used to
-# store state in a provider configuration block and retrieved in modules
-# using the `stateful_state` data source.
+# This exercise demonstrates how the configuration passed to the
+# `stateful` provider keeps the types of the values passed in the
+# `state` argument.
 ##
 
 ## Required Providers
@@ -22,14 +22,20 @@ terraform {
 provider "stateful" {
   state = {
     key1 = "value1"
-    key2 = "value2"
+    key2 = 2
+    key3 = ["value3", "value4"]
   }
 }
+
+## Data Sources
+
+data "stateful_state" "state" {}
 
 ## Modules
 
 module "state" {
   source = "./module"
+  input  = data.stateful_state.state.state
 }
 
 ## Outputs

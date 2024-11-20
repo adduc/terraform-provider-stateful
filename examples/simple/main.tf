@@ -1,3 +1,11 @@
+##
+# Exercise: Simple Example
+#
+# This exercise demonstrates how the `stateful` provider can be used to
+# store state in a provider configuration block and retrieve it using a
+# data source.
+##
+
 ## Required Providers
 
 terraform {

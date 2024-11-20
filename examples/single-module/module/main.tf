@@ -1,8 +1,7 @@
 terraform {
   required_providers {
     stateful = {
-      source  = "adduc/stateful"
-      version = "0-dev"
+      source = "adduc/stateful"
     }
   }
 }

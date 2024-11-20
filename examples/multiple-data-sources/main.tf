@@ -1,3 +1,10 @@
+##
+# Exercise: Multiple Data Sources
+#
+# This exercise shows how multiple data sources can be used to keep
+# track of different states.
+##
+
 ## Required Providers
 
 terraform {
@@ -22,8 +29,8 @@ provider "stateful" {
 provider "stateful" {
   alias = "state2"
   state = {
-    key1 = "value1"
-    key2 = "value2"
+    key3 = "value3"
+    key4 = "value4"
   }
 }
 
