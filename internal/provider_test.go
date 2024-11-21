@@ -9,13 +9,16 @@ import (
 	"github.com/hashicorp/terraform-plugin-testing/helper/resource"
 )
 
-// test that the terraform provider StatefulProvider can be initialized
-// with no configuration
-func TestStatefulProvider(t *testing.T) {
+func protoV6ProviderFactory() map[string]func() (tfprotov6.ProviderServer, error) {
+	return map[string]func() (tfprotov6.ProviderServer, error){
+		"stateful":  providerserver.NewProtocol6WithError(New("test")()),
+		"stateful2": providerserver.NewProtocol6WithError(New("test2")()),
+	}
+}
+
+func TestStatefulProviderMissingConfig(t *testing.T) {
 	resource.Test(t, resource.TestCase{
-		ProtoV6ProviderFactories: map[string]func() (tfprotov6.ProviderServer, error){
-			"stateful": providerserver.NewProtocol6WithError(New("test")()),
-		},
+		ProtoV6ProviderFactories: protoV6ProviderFactory(),
 		Steps: []resource.TestStep{
 			{
 				Config: `
@@ -28,6 +31,28 @@ func TestStatefulProvider(t *testing.T) {
 					data "stateful_state" "state" {}
 				`,
 				ExpectError: regexp.MustCompile(`The argument "state" is required, but no definition was found.`),
+			},
+		},
+	})
+}
+
+func TestStatefulProviderConfigured(t *testing.T) {
+	resource.Test(t, resource.TestCase{
+		ProtoV6ProviderFactories: protoV6ProviderFactory(),
+		Steps: []resource.TestStep{
+			{
+				Config: `
+					# check that the provider accepts the state argument
+					provider "stateful" {
+						state = {
+							"key" = "value"
+						}
+					}
+
+					data "stateful_state" "state" {}
+
+					output "state" { value = data.stateful_state.state }
+				`,
 			},
 		},
 	})
